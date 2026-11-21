@@ -62,6 +62,16 @@ public sealed class NotificationService
         finally { _busy = false; }
     }
 
+    public void Remove(uint id)
+    {
+        try { _listener?.RemoveNotification(id); _cache.Remove(id); } catch { }
+    }
+
+    public void ClearAll()
+    {
+        try { _listener?.ClearNotifications(); _cache.Clear(); } catch { }
+    }
+
     private static async Task<NotifItem> ParseAsync(UserNotification n)
     {
         string app = "";
@@ -78,7 +88,7 @@ public sealed class NotificationService
         }
         catch { }
 
-        string title = texts.FirstOrDefault() ?? (app.Length > 0 ? app : "Notifikacija");
+        string title = texts.FirstOrDefault() ?? (app.Length > 0 ? app : "Notification");
         string body = string.Join(" — ", texts.Skip(1));
         return new NotifItem(n.Id, app, title, body, n.CreationTime.LocalDateTime, icon);
     }

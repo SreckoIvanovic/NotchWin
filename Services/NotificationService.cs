@@ -14,8 +14,11 @@ public sealed class NotificationService
 {
     private UserNotificationListener? _listener;
     private readonly Dictionary<uint, NotifItem> _cache = new();
+    private readonly HashSet<uint> _dismissed = new();
+    private HashSet<uint> _lastIds = new();
     private bool _first = true;
     private bool _busy;
+    private int _generation;
 
     public bool Available { get; private set; }
 
@@ -35,9 +38,12 @@ public sealed class NotificationService
     {
         if (!Available || _listener == null || _busy) return null;
         _busy = true;
+        int gen = _generation;
         try
         {
             var list = await _listener.GetNotificationsAsync(NotificationKinds.Toast);
+            if (gen != _generation) return null;
+
             var all = new List<NotifItem>();
             var fresh = new List<NotifItem>();
             var ids = new HashSet<uint>();
@@ -45,6 +51,7 @@ public sealed class NotificationService
             foreach (var n in list)
             {
                 ids.Add(n.Id);
+                if (_dismissed.Contains(n.Id)) continue;
                 if (!_cache.TryGetValue(n.Id, out var item))
                 {
                     item = await ParseAsync(n);
@@ -54,7 +61,11 @@ public sealed class NotificationService
                 all.Add(item);
             }
 
+            if (gen != _generation) return null;
+
             foreach (var gone in _cache.Keys.Where(k => !ids.Contains(k)).ToList()) _cache.Remove(gone);
+            _dismissed.IntersectWith(ids);
+            _lastIds = ids;
             _first = false;
             return (all.OrderByDescending(x => x.Time).ToList(), fresh);
         }
@@ -64,12 +75,24 @@ public sealed class NotificationService
 
     public void Remove(uint id)
     {
-        try { _listener?.RemoveNotification(id); _cache.Remove(id); } catch { }
+        _generation++;
+        _dismissed.Add(id);
+        _cache.Remove(id);
+        try { _listener?.RemoveNotification(id); } catch { }
     }
 
     public void ClearAll()
     {
-        try { _listener?.ClearNotifications(); _cache.Clear(); } catch { }
+        _generation++;
+        var ids = _lastIds.Concat(_cache.Keys).ToHashSet();
+        _dismissed.UnionWith(ids);
+        _cache.Clear();
+        try { _listener?.ClearNotifications(); }
+        catch
+        {
+            foreach (var id in ids)
+                try { _listener?.RemoveNotification(id); } catch { }
+        }
     }
 
     private static async Task<NotifItem> ParseAsync(UserNotification n)

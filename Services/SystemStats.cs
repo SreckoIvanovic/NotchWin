@@ -10,6 +10,9 @@ public sealed class SystemStats
     public int RamPercent { get; private set; }
     public int BatteryPercent { get; private set; } = -1;
     public bool Charging { get; private set; }
+    public double MemUsedGB { get; private set; }
+    public double MemTotalGB { get; private set; }
+    public TimeSpan? TimeLeft { get; private set; }
 
     public void Update()
     {
@@ -24,7 +27,12 @@ public sealed class SystemStats
         }
 
         var mem = new NativeMethods.MEMORYSTATUSEX { dwLength = (uint)Marshal.SizeOf<NativeMethods.MEMORYSTATUSEX>() };
-        if (NativeMethods.GlobalMemoryStatusEx(ref mem)) RamPercent = (int)mem.dwMemoryLoad;
+        if (NativeMethods.GlobalMemoryStatusEx(ref mem))
+        {
+            RamPercent = (int)mem.dwMemoryLoad;
+            MemTotalGB = mem.ullTotalPhys / 1073741824.0;
+            MemUsedGB = (mem.ullTotalPhys - mem.ullAvailPhys) / 1073741824.0;
+        }
 
         UpdateBattery();
     }
@@ -35,6 +43,7 @@ public sealed class SystemStats
         {
             BatteryPercent = p.BatteryLifePercent == 255 || p.BatteryFlag == 128 ? -1 : p.BatteryLifePercent;
             Charging = p.ACLineStatus == 1;
+            TimeLeft = !Charging && p.BatteryLifeTime != uint.MaxValue ? TimeSpan.FromSeconds(p.BatteryLifeTime) : null;
         }
     }
 }

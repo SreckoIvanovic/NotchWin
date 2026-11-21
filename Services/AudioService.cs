@@ -26,32 +26,5 @@ public sealed class AudioService : IDisposable
         catch { }
     }
 
-    public bool IsMicMuted()
-    {
-        try
-        {
-            foreach (var d in _enum.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active))
-            {
-                using (d) return d.AudioEndpointVolume.Mute;
-            }
-        }
-        catch { }
-        return false;
-    }
-
-    public bool ToggleMic()
-    {
-        bool newState = !IsMicMuted();
-        try
-        {
-            foreach (var d in _enum.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active))
-            {
-                using (d) d.AudioEndpointVolume.Mute = newState;
-            }
-        }
-        catch { }
-        return newState;
-    }
-
     public void Dispose() => _enum.Dispose();
 }

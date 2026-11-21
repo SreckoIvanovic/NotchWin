@@ -26,9 +26,14 @@ public sealed class SystemStats
         var mem = new NativeMethods.MEMORYSTATUSEX { dwLength = (uint)Marshal.SizeOf<NativeMethods.MEMORYSTATUSEX>() };
         if (NativeMethods.GlobalMemoryStatusEx(ref mem)) RamPercent = (int)mem.dwMemoryLoad;
 
+        UpdateBattery();
+    }
+
+    public void UpdateBattery()
+    {
         if (NativeMethods.GetSystemPowerStatus(out var p))
         {
-            BatteryPercent = p.BatteryLifePercent == 255 ? -1 : p.BatteryLifePercent;
+            BatteryPercent = p.BatteryLifePercent == 255 || p.BatteryFlag == 128 ? -1 : p.BatteryLifePercent;
             Charging = p.ACLineStatus == 1;
         }
     }

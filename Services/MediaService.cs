@@ -64,35 +64,14 @@ public sealed class MediaService
                 Artist = props.Artist ?? "";
                 Playing = s.GetPlaybackInfo().PlaybackStatus ==
                           GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing;
-                Art = await LoadThumbAsync(props.Thumbnail);
+                Art = await ImageUtil.LoadAsync(props.Thumbnail);
             }
         }
         catch { }
         Changed?.Invoke();
     }
 
-    private static async Task<BitmapImage?> LoadThumbAsync(Windows.Storage.Streams.IRandomAccessStreamReference? thumb)
-    {
-        if (thumb == null) return null;
-        try
-        {
-            using var ras = await thumb.OpenReadAsync();
-            using var stream = ras.AsStreamForRead();
-            var ms = new MemoryStream();
-            await stream.CopyToAsync(ms);
-            ms.Position = 0;
-            var bmp = new BitmapImage();
-            bmp.BeginInit();
-            bmp.CacheOption = BitmapCacheOption.OnLoad;
-            bmp.StreamSource = ms;
-            bmp.EndInit();
-            bmp.Freeze();
-            return bmp;
-        }
-        catch { return null; }
-    }
-
-    public (TimeSpan pos, TimeSpan dur) GetTimeline()
+public (TimeSpan pos, TimeSpan dur) GetTimeline()
     {
         try
         {

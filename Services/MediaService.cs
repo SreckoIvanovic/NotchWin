@@ -16,6 +16,11 @@ public sealed class MediaService
     public bool Playing { get; private set; }
     public bool HasSession => _session != null;
     public BitmapImage? Art { get; private set; }
+    public bool Shuffle { get; private set; }
+    public Windows.Media.MediaPlaybackAutoRepeatMode Repeat { get; private set; }
+    public bool CanShuffle { get; private set; }
+    public bool CanRepeat { get; private set; }
+    public bool CanSeek { get; private set; }
 
     public async Task InitAsync()
     {
@@ -25,7 +30,7 @@ public sealed class MediaService
             _mgr.CurrentSessionChanged += (_, _) => Hook();
             Hook();
         }
-        catch { }
+        catch {  }
     }
 
     private void Hook()
@@ -62,8 +67,13 @@ public sealed class MediaService
                 var props = await s.TryGetMediaPropertiesAsync();
                 Title = props.Title ?? "";
                 Artist = props.Artist ?? "";
-                Playing = s.GetPlaybackInfo().PlaybackStatus ==
-                          GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing;
+                var info = s.GetPlaybackInfo();
+                Playing = info.PlaybackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing;
+                Shuffle = info.IsShuffleActive ?? false;
+                Repeat = info.AutoRepeatMode ?? Windows.Media.MediaPlaybackAutoRepeatMode.None;
+                CanShuffle = info.Controls.IsShuffleEnabled;
+                CanRepeat = info.Controls.IsRepeatEnabled;
+                CanSeek = info.Controls.IsPlaybackPositionEnabled;
                 Art = await ImageUtil.LoadAsync(props.Thumbnail);
             }
         }
@@ -71,7 +81,7 @@ public sealed class MediaService
         Changed?.Invoke();
     }
 
-public (TimeSpan pos, TimeSpan dur) GetTimeline()
+    public (TimeSpan pos, TimeSpan dur) GetTimeline()
     {
         try
         {
@@ -85,6 +95,30 @@ public (TimeSpan pos, TimeSpan dur) GetTimeline()
             return (pos, dur);
         }
         catch { return (TimeSpan.Zero, TimeSpan.Zero); }
+    }
+
+    public void ToggleShuffle() => _ = _session?.TryChangeShuffleActiveAsync(!Shuffle);
+
+    public void CycleRepeat()
+    {
+        var next = Repeat switch
+        {
+            Windows.Media.MediaPlaybackAutoRepeatMode.None => Windows.Media.MediaPlaybackAutoRepeatMode.List,
+            Windows.Media.MediaPlaybackAutoRepeatMode.List => Windows.Media.MediaPlaybackAutoRepeatMode.Track,
+            _ => Windows.Media.MediaPlaybackAutoRepeatMode.None,
+        };
+        _ = _session?.TryChangeAutoRepeatModeAsync(next);
+    }
+
+    public void Seek(TimeSpan position)
+    {
+        try
+        {
+            var tl = _session?.GetTimelineProperties();
+            if (tl == null) return;
+            _ = _session!.TryChangePlaybackPositionAsync((tl.StartTime + position).Ticks);
+        }
+        catch { }
     }
 
     public void PlayPause() => _ = _session?.TryTogglePlayPauseAsync();

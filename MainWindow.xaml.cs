@@ -67,7 +67,6 @@ public partial class MainWindow : Window
 
         AutoStartItem.IsChecked = _settings.AutoStart;
         AutoHideItem.IsChecked = _settings.AutoHide;
-        DockItem.IsChecked = _settings.DockEnabled;
         AutoStart.Apply(_settings.AutoStart);
 
         PlaceWindow();
@@ -130,7 +129,6 @@ public partial class MainWindow : Window
                 await PollNotificationsAsync();
                 _notifTimer.Start();
             }
-            if (_settings.DockEnabled) ShowDock();
             await RefreshWeatherAsync();
             _weatherTimer.Start();
         };
@@ -292,9 +290,7 @@ protected override void OnSourceInitialized(EventArgs e)
         {
             double l = Left + (Width - Notch.ActualWidth) / 2;
             bool inside = p.X >= l - 2 && p.X <= l + Notch.ActualWidth + 2 && p.Y >= Top && p.Y <= Top + Notch.ActualHeight + 2;
-            if (inside) _holdOpenUntil = DateTime.MinValue;
-            bool held = DateTime.Now < _holdOpenUntil;
-            if (inside || held || _dragging || Notch.ContextMenu?.IsOpen == true) _collapseTimer.Stop();
+            if (inside || _dragging || Notch.ContextMenu?.IsOpen == true) _collapseTimer.Stop();
             else if (!_collapseTimer.IsEnabled) _collapseTimer.Start();
             return;
         }
@@ -947,36 +943,4 @@ private void AutoStart_Click(object sender, RoutedEventArgs e)
     }
 
     private void Exit_Click(object sender, RoutedEventArgs e) => Application.Current.Shutdown();
-
-private DockWindow? _dock;
-    private DateTime _holdOpenUntil = DateTime.MinValue;
-
-    private void ShowDock()
-    {
-        if (_dock != null) return;
-        _dock = new DockWindow(_media, _audio, _stats, OpenTabFromDock, () => SetDockEnabled(false));
-        _dock.Show();
-    }
-
-    private void SetDockEnabled(bool on)
-    {
-        _settings.DockEnabled = on;
-        _settings.Save();
-        DockItem.IsChecked = on;
-        if (on) ShowDock();
-        else { _dock?.Shutdown(); _dock = null; }
-    }
-
-    private void Dock_Click(object sender, RoutedEventArgs e) => SetDockEnabled(DockItem.IsChecked);
-
-    private void OpenTabFromDock(int tab)
-    {
-        if (_hidden) { _hidden = false; ApplyVisibility(); }
-        _forceShow = true;
-        SelectTab(tab);
-        _holdOpenUntil = DateTime.Now.AddSeconds(4);
-        _collapseTimer.Stop();
-        GoTo(Mode.Expanded);
-        ApplyVisibility();
-    }
 }

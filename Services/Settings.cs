@@ -10,8 +10,6 @@ public sealed class Settings
 
     public bool AutoHide { get; set; } = true;
 
-    public bool DockEnabled { get; set; } = true;
-
     public string City { get; set; } = "";
 
     private static readonly string Dir =

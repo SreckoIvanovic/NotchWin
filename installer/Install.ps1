@@ -12,12 +12,8 @@ Write-Host "Building NotchWin..." -ForegroundColor Cyan
 if ($LASTEXITCODE -ne 0) { throw "Build failed" }
 
 Write-Host "Closing the running notch..." -ForegroundColor Cyan
-if (Get-Process NotchWin -ErrorAction SilentlyContinue) {
-    taskkill.exe /IM NotchWin.exe 2>$null | Out-Null
-    for ($i = 0; $i -lt 30 -and (Get-Process NotchWin -ErrorAction SilentlyContinue); $i++) { Start-Sleep -Milliseconds 100 }
-    Get-Process NotchWin -ErrorAction SilentlyContinue | Stop-Process -Force
-}
-Start-Sleep -Milliseconds 500
+Get-Process NotchWin -ErrorAction SilentlyContinue | Stop-Process -Force
+Start-Sleep -Milliseconds 800
 
 Write-Host "Installing to $dest" -ForegroundColor Cyan
 New-Item -ItemType Directory -Force $dest | Out-Null

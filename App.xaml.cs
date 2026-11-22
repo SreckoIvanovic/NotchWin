@@ -22,12 +22,7 @@ public partial class App : Application
             Log.Write("UI error: " + ex.Exception);
             ex.Handled = true;
         };
-        AppDomain.CurrentDomain.UnhandledException += (_, ex) =>
-        {
-            Log.Write("Fatal: " + ex.ExceptionObject);
-            AppBar.Current?.Remove();
-        };
-        AppDomain.CurrentDomain.ProcessExit += (_, _) => AppBar.Current?.Remove();
+        AppDomain.CurrentDomain.UnhandledException += (_, ex) => Log.Write("Fatal: " + ex.ExceptionObject);
         TaskScheduler.UnobservedTaskException += (_, ex) => { Log.Write("Task error: " + ex.Exception); ex.SetObserved(); };
 
         base.OnStartup(e);

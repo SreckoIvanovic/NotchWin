@@ -21,6 +21,7 @@ public sealed class MediaService
     public bool CanShuffle { get; private set; }
     public bool CanRepeat { get; private set; }
     public bool CanSeek { get; private set; }
+    public string SourceApp { get; private set; } = "";
 
     public async Task InitAsync()
     {
@@ -67,6 +68,7 @@ public sealed class MediaService
                 var props = await s.TryGetMediaPropertiesAsync();
                 Title = props.Title ?? "";
                 Artist = props.Artist ?? "";
+                SourceApp = FriendlySource(s.SourceAppUserModelId ?? "");
                 var info = s.GetPlaybackInfo();
                 Playing = info.PlaybackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing;
                 Shuffle = info.IsShuffleActive ?? false;
@@ -95,6 +97,21 @@ public sealed class MediaService
             return (pos, dur);
         }
         catch { return (TimeSpan.Zero, TimeSpan.Zero); }
+    }
+
+    private static string FriendlySource(string id)
+    {
+        string s = id.ToLowerInvariant();
+        if (s.Contains("spotify")) return "Spotify";
+        if (s.Contains("chrome")) return "Chrome";
+        if (s.Contains("brave")) return "Brave";
+        if (s.Contains("msedge")) return "Edge";
+        if (s.Contains("firefox")) return "Firefox";
+        if (s.Contains("zunemusic") || s.Contains("media.player")) return "Media Player";
+        if (s.Contains("vlc")) return "VLC";
+        if (id.Length == 0) return "Music";
+        var name = id.Contains('!') ? id[(id.LastIndexOf('!') + 1)..] : System.IO.Path.GetFileNameWithoutExtension(id);
+        return name.Length > 0 ? char.ToUpper(name[0]) + name[1..] : "Music";
     }
 
     public void ToggleShuffle() => _ = _session?.TryChangeShuffleActiveAsync(!Shuffle);

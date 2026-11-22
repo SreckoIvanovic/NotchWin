@@ -1,8 +1,10 @@
 $ErrorActionPreference = 'SilentlyContinue'
 $dest = Join-Path $env:LOCALAPPDATA 'Programs\NotchWin'
 
+taskkill.exe /IM NotchWin.exe | Out-Null
+for ($i = 0; $i -lt 30 -and (Get-Process NotchWin); $i++) { Start-Sleep -Milliseconds 100 }
 Get-Process NotchWin | Stop-Process -Force
-Start-Sleep -Milliseconds 800
+Start-Sleep -Milliseconds 500
 
 schtasks.exe /Delete /TN "NotchWin" /F | Out-Null
 Remove-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Name 'NotchWin'

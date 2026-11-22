@@ -8,7 +8,7 @@
         TextOptions.TextFormattingMode="Ideal" TextOptions.TextRenderingMode="ClearType"
         FontFamily="Segoe UI Variable Text, Segoe UI">
 
-    <Window.Resources>
+<Window.Resources>
         <FontFamily x:Key="Icons">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
         <SolidColorBrush x:Key="Fg" Color="#F5F5F7"/>
         <SolidColorBrush x:Key="Dim" Color="#8E8E93"/>
@@ -71,7 +71,7 @@
                     <ControlTemplate TargetType="Button">
                         <Grid>
                             <Border Background="{TemplateBinding Background}" CornerRadius="15"/>
-                            <Border x:Name="hov" Background="{StaticResource Hover}" CornerRadius="15" Opacity="0"/>
+                            <Border x:Name="hov" Background="#0FFFFFFF" CornerRadius="15" Opacity="0"/>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
                         <ControlTemplate.Triggers>
@@ -298,6 +298,148 @@
             </Setter>
         </Style>
 
+        <Style x:Key="SeekFill" TargetType="RepeatButton" BasedOn="{StaticResource FillRepeat}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RepeatButton">
+                        <Grid Background="Transparent">
+                            <Border Height="4" CornerRadius="2" Background="White"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SeekKnob" TargetType="Thumb">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Ellipse x:Name="k" Width="13" Height="13" Fill="White">
+                            <Ellipse.Effect>
+                                <DropShadowEffect BlurRadius="6" ShadowDepth="0" Opacity="0.5" Color="Black"/>
+                            </Ellipse.Effect>
+                        </Ellipse>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SeekSlider" TargetType="Slider">
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="IsMoveToPointEnabled" Value="True"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid Height="18">
+                            <Border Height="4" CornerRadius="2" Background="#3DFFFFFF" VerticalAlignment="Center"/>
+                            <Track x:Name="PART_Track">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource SeekFill}"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource EmptyRepeat}"/>
+                                </Track.IncreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource SeekKnob}"/>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="MediaBtn" TargetType="Button" BasedOn="{StaticResource IconBtn}">
+            <Setter Property="Width" Value="42"/>
+            <Setter Property="Height" Value="38"/>
+        </Style>
+        <Style x:Key="MediaIcon" TargetType="Path">
+            <Setter Property="Fill" Value="White"/>
+            <Setter Property="Stroke" Value="White"/>
+            <Setter Property="StrokeThickness" Value="1.2"/>
+            <Setter Property="StrokeLineJoin" Value="Round"/>
+            <Setter Property="Stretch" Value="Uniform"/>
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Height" Value="20"/>
+        </Style>
+
+        <Style x:Key="GlassCard" TargetType="Border">
+            <Setter Property="CornerRadius" Value="18"/>
+            <Setter Property="Padding" Value="12,8,10,8"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#1CFFFFFF" Offset="0"/>
+                        <GradientStop Color="#10FFFFFF" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#38FFFFFF" Offset="0"/>
+                        <GradientStop Color="#10FFFFFF" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="CardIconBox" TargetType="Border">
+            <Setter Property="Width" Value="26"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+        <Style x:Key="CardIcon" TargetType="Path">
+            <Setter Property="StrokeThickness" Value="1.8"/>
+            <Setter Property="StrokeLineJoin" Value="Round"/>
+            <Setter Property="StrokeStartLineCap" Value="Round"/>
+            <Setter Property="StrokeEndLineCap" Value="Round"/>
+            <Setter Property="Width" Value="15"/>
+            <Setter Property="Height" Value="15"/>
+            <Setter Property="Stretch" Value="Uniform"/>
+        </Style>
+        <Style x:Key="CardLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#B8FFFFFF"/>
+            <Setter Property="FontSize" Value="12.5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,6,0,0"/>
+        </Style>
+        <Style x:Key="CardSub" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10.5"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+        </Style>
+        <Style x:Key="Ring" TargetType="Path">
+            <Setter Property="StrokeThickness" Value="4.5"/>
+            <Setter Property="StrokeStartLineCap" Value="Round"/>
+            <Setter Property="StrokeEndLineCap" Value="Round"/>
+        </Style>
+        <Style x:Key="RingValue" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13.5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Segoe UI Variable Display, Segoe UI"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="WxChip" TargetType="Border">
+            <Setter Property="Background" Value="#17FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#1FFFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="13"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="Margin" Value="0,0,6,0"/>
+        </Style>
+        <Style x:Key="WxChipText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#E6FFFFFF"/>
+            <Setter Property="FontSize" Value="11.5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="6,0,0,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
         <Style x:Key="RowLabel" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#C7C7CC"/>
             <Setter Property="FontSize" Value="13"/>
@@ -372,6 +514,8 @@
             <Border.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="AutoStartItem" Header="Start with Windows" IsCheckable="True" Click="AutoStart_Click"/>
+                    <MenuItem x:Name="AutoHideItem" Header="Auto-hide over maximized / fullscreen windows" IsCheckable="True" Click="AutoHide_Click"/>
+                    <MenuItem Header="Hide notch" InputGestureText="Ctrl+Alt+N" Click="Hide_Click"/>
                     <MenuItem Header="Settings (weather city)…" Click="OpenSettings_Click"/>
                     <Separator/>
                     <MenuItem Header="Exit" Click="Exit_Click"/>
@@ -411,7 +555,7 @@
                 </Grid>
 
                 <Grid x:Name="PeekView" Width="420" Height="74" HorizontalAlignment="Center" VerticalAlignment="Top"
-                      Opacity="0" IsHitTestVisible="False">
+                      Opacity="0" IsHitTestVisible="False" Background="Transparent" Cursor="Hand">
                     <Grid.CacheMode>
                         <BitmapCache EnableClearType="True" SnapsToDevicePixels="True"/>
                     </Grid.CacheMode>
@@ -461,14 +605,37 @@
                         </Grid.RowDefinitions>
 
                         <Border HorizontalAlignment="Center" CornerRadius="19" Padding="4" Margin="0,0,0,10"
-                                Background="#12FFFFFF" BorderBrush="#1AFFFFFF" BorderThickness="1">
+                                Background="#730C0D12" BorderBrush="#1AFFFFFF" BorderThickness="1">
+                            <Grid>
+                            <Border x:Name="TabIndicator" Width="42" Height="30" CornerRadius="15" HorizontalAlignment="Left"
+                                    Margin="2,0,0,0" BorderThickness="1" IsHitTestVisible="False">
+                                <Border.RenderTransform>
+                                    <TranslateTransform x:Name="TabIndicatorX"/>
+                                </Border.RenderTransform>
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#47FFFFFF" Offset="0"/>
+                                        <GradientStop Color="#24FFFFFF" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Border.BorderBrush>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#73FFFFFF" Offset="0"/>
+                                        <GradientStop Color="#26FFFFFF" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.BorderBrush>
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="12" ShadowDepth="3" Opacity="0.3" Color="Black"/>
+                                </Border.Effect>
+                            </Border>
                             <StackPanel Orientation="Horizontal">
                                 <Button x:Name="TabBtn0" Style="{StaticResource TabBtn}" Content="&#xE8D6;" Tag="0" Click="Tab_Click"/>
                                 <Button x:Name="TabBtn1" Style="{StaticResource TabBtn}" Content="&#xE8B7;" Tag="1" Click="Tab_Click"/>
                                 <Button x:Name="TabBtn2" Style="{StaticResource TabBtn}" Content="&#xE9D9;" Tag="2" Click="Tab_Click"/>
                                 <Button x:Name="TabBtn3" Style="{StaticResource TabBtn}" Content="&#xE787;" Tag="3" Click="Tab_Click"/>
+                                <Button x:Name="TabBtn4" Style="{StaticResource TabBtn}" Content="&#xE753;" Tag="4" Click="Tab_Click"/>
                                 <Grid>
-                                    <Button x:Name="TabBtn4" Style="{StaticResource TabBtn}" Content="&#xEA8F;" Tag="4" Click="Tab_Click"/>
+                                    <Button x:Name="TabBtn5" Style="{StaticResource TabBtn}" Content="&#xEA8F;" Tag="5" Click="Tab_Click"/>
                                     <Border x:Name="NotifBadge" Visibility="Collapsed" IsHitTestVisible="False"
                                             HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"
                                             MinWidth="14" Height="14" CornerRadius="7" Background="#FF453A" Padding="3.5,0">
@@ -477,54 +644,92 @@
                                     </Border>
                                 </Grid>
                             </StackPanel>
+                            </Grid>
                         </Border>
 
                         <Grid Grid.Row="1">
-                            <Grid x:Name="Panel0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Border Width="92" Height="92" CornerRadius="16" VerticalAlignment="Center">
-                                    <Border.Background>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                            <GradientStop Color="#3A3A3C" Offset="0"/>
-                                            <GradientStop Color="#1C1C1E" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Border.Background>
-                                    <Border.Effect>
-                                        <DropShadowEffect BlurRadius="20" ShadowDepth="3" Opacity="0.6" Color="Black"/>
-                                    </Border.Effect>
-                                    <Grid>
-                                        <TextBlock Text="&#xE8D6;" FontFamily="{StaticResource Icons}" FontSize="30" Foreground="#636366"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        <Border CornerRadius="16">
-                                            <Border.Background>
-                                                <ImageBrush x:Name="ArtBrush" Stretch="UniformToFill"/>
-                                            </Border.Background>
-                                        </Border>
-                                    </Grid>
-                                </Border>
+                            <Grid x:Name="Panel0" Margin="8,0,8,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
 
-                                <StackPanel Grid.Column="1" Margin="18,0,14,0" VerticalAlignment="Center">
-                                    <TextBlock x:Name="TitleText" Text="Nothing playing" FontSize="17" FontWeight="SemiBold"
-                                               FontFamily="Segoe UI Variable Display, Segoe UI"
-                                               Foreground="{StaticResource Fg}" TextTrimming="CharacterEllipsis"/>
-                                    <TextBlock x:Name="ArtistText" FontSize="13" Margin="0,1,0,0"
-                                               Foreground="{StaticResource Dim}" TextTrimming="CharacterEllipsis"/>
-                                    <ProgressBar x:Name="MediaProgress" Style="{StaticResource KnobBar}" Margin="0,13,6,0"/>
-                                    <Grid Margin="0,3,0,0">
-                                        <TextBlock x:Name="PosText" FontSize="10.5" Foreground="{StaticResource Dim}"/>
-                                        <TextBlock x:Name="DurText" FontSize="10.5" Foreground="{StaticResource Dim}" HorizontalAlignment="Right"/>
-                                    </Grid>
-                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Width="54" Height="54" CornerRadius="11">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#3A3A3C" Offset="0"/>
+                                                <GradientStop Color="#1C1C1E" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <Grid>
+                                            <TextBlock Text="&#xE8D6;" FontFamily="{StaticResource Icons}" FontSize="20" Foreground="#636366"
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <Border CornerRadius="11">
+                                                <Border.Background>
+                                                    <ImageBrush x:Name="ArtBrush" Stretch="UniformToFill"/>
+                                                </Border.Background>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Margin="14,0,10,0" VerticalAlignment="Center">
+                                        <TextBlock x:Name="TitleText" Text="Nothing playing" FontSize="16.5" FontWeight="SemiBold"
+                                                   FontFamily="Segoe UI Variable Display, Segoe UI"
+                                                   Foreground="White" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock x:Name="ArtistText" FontSize="14" Margin="0,1,0,0"
+                                                   Foreground="#9A9A9F" TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+                                    <StackPanel x:Name="Equalizer" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Top"
+                                                Height="22" Margin="0,2,2,0">
+                                        <Rectangle Width="3" Height="22" RadiusX="1.5" RadiusY="1.5" Fill="#1ED760" Margin="1.5,0" RenderTransformOrigin="0.5,0.5"><Rectangle.RenderTransform><ScaleTransform ScaleY="0.4"/></Rectangle.RenderTransform></Rectangle>
+                                        <Rectangle Width="3" Height="22" RadiusX="1.5" RadiusY="1.5" Fill="#1ED760" Margin="1.5,0" RenderTransformOrigin="0.5,0.5"><Rectangle.RenderTransform><ScaleTransform ScaleY="0.7"/></Rectangle.RenderTransform></Rectangle>
+                                        <Rectangle Width="3" Height="22" RadiusX="1.5" RadiusY="1.5" Fill="#1ED760" Margin="1.5,0" RenderTransformOrigin="0.5,0.5"><Rectangle.RenderTransform><ScaleTransform ScaleY="1"/></Rectangle.RenderTransform></Rectangle>
+                                        <Rectangle Width="3" Height="22" RadiusX="1.5" RadiusY="1.5" Fill="#1ED760" Margin="1.5,0" RenderTransformOrigin="0.5,0.5"><Rectangle.RenderTransform><ScaleTransform ScaleY="0.6"/></Rectangle.RenderTransform></Rectangle>
+                                        <Rectangle Width="3" Height="22" RadiusX="1.5" RadiusY="1.5" Fill="#1ED760" Margin="1.5,0" RenderTransformOrigin="0.5,0.5"><Rectangle.RenderTransform><ScaleTransform ScaleY="0.35"/></Rectangle.RenderTransform></Rectangle>
+                                    </StackPanel>
+                                </Grid>
 
-                                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                                    <Button Style="{StaticResource IconBtn}" Content="&#xE892;" Click="Prev_Click"/>
-                                    <Button x:Name="PlayBtn" Style="{StaticResource GlassBtn}" Content="&#xE768;" Margin="3,0" Click="PlayPause_Click"/>
-                                    <Button Style="{StaticResource IconBtn}" Content="&#xE893;" Click="Next_Click"/>
-                                </StackPanel>
+                                <Grid Grid.Row="1" Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="40"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock x:Name="PosText" Text="0:00" FontSize="11" Foreground="#9A9A9F" VerticalAlignment="Center"/>
+                                    <Slider x:Name="SeekSlider" Grid.Column="1" Style="{StaticResource SeekSlider}" Minimum="0" Maximum="1"
+                                            VerticalAlignment="Center" PreviewMouseLeftButtonUp="Seek_MouseUp"/>
+                                    <TextBlock x:Name="DurText" Grid.Column="2" Text="0:00" FontSize="11" Foreground="#9A9A9F"
+                                               HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                </Grid>
+
+                                <Grid Grid.Row="2" VerticalAlignment="Center" Margin="0,2,0,0">
+                                    <Button x:Name="ShuffleBtn" Style="{StaticResource MediaBtn}" HorizontalAlignment="Left"
+                                            FontSize="16" Content="&#xE8B1;" Click="Shuffle_Click"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button Style="{StaticResource MediaBtn}" Click="Prev_Click">
+                                            <Path Style="{StaticResource MediaIcon}" Width="17" Height="17" Data="M5,5 H7.5 V19 H5 Z M19,5 L9.5,12 L19,19 Z"/>
+                                        </Button>
+                                        <Button Style="{StaticResource MediaBtn}" Margin="18,0" Click="PlayPause_Click">
+                                            <Path x:Name="PlayIcon" Style="{StaticResource MediaIcon}" Width="21" Height="21" Data="M7,4.5 L19.5,12 L7,19.5 Z"/>
+                                        </Button>
+                                        <Button Style="{StaticResource MediaBtn}" Click="Next_Click">
+                                            <Path Style="{StaticResource MediaIcon}" Width="17" Height="17" Data="M16.5,5 H19 V19 H16.5 Z M5,5 L14.5,12 L5,19 Z"/>
+                                        </Button>
+                                    </StackPanel>
+                                    <Grid HorizontalAlignment="Right">
+                                        <Button x:Name="RepeatBtn" Style="{StaticResource MediaBtn}" FontSize="16" Content="&#xE8EE;" Click="Repeat_Click"/>
+                                        <Ellipse x:Name="RepeatDot" Width="4" Height="4" Fill="#1ED760" VerticalAlignment="Bottom"
+                                                 HorizontalAlignment="Center" Margin="0,0,0,1" IsHitTestVisible="False" Visibility="Collapsed"/>
+                                    </Grid>
+                                    <Ellipse x:Name="ShuffleDot" Width="4" Height="4" Fill="#1ED760" VerticalAlignment="Bottom"
+                                             HorizontalAlignment="Left" Margin="19,0,0,1" IsHitTestVisible="False" Visibility="Collapsed"/>
+                                </Grid>
                             </Grid>
 
                             <Grid x:Name="Panel1" Visibility="Collapsed">
@@ -533,10 +738,8 @@
                                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <TextBlock Text="&#xE896;" FontFamily="{StaticResource Icons}" FontSize="22"
                                                    Foreground="{StaticResource Dim}" HorizontalAlignment="Center"/>
-                                        <TextBlock Text="Drop files here to keep them handy" Foreground="{StaticResource Dim}" FontSize="12.5"
+                                        <TextBlock Text="Drop files here" Foreground="{StaticResource Dim}" FontSize="12.5"
                                                    Margin="0,6,0,0" HorizontalAlignment="Center"/>
-                                        <TextBlock Text="then drag them out anywhere — another folder, a chat, an email"
-                                                   Foreground="#636366" FontSize="11" Margin="0,2,0,0" HorizontalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>
                                 <ListBox x:Name="ShelfList" Style="{StaticResource CleanList}"
@@ -563,44 +766,113 @@
                                 </ListBox>
                             </Grid>
 
-                            <Grid x:Name="Panel2" Visibility="Collapsed" VerticalAlignment="Center">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="28"/>
-                                    <ColumnDefinition Width="78"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="52"/>
-                                </Grid.ColumnDefinitions>
+                            <Grid x:Name="Panel2" Visibility="Collapsed">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="8"/>
+                                    <RowDefinition Height="44"/>
                                 </Grid.RowDefinitions>
 
-                                <Path Style="{StaticResource LineIcon}"
-                                      Data="M7,7 H17 V17 H7 Z M10,10 H14 V14 H10 Z M9.5,4 V7 M14.5,4 V7 M9.5,17 V20 M14.5,17 V20 M4,9.5 H7 M4,14.5 H7 M17,9.5 H20 M17,14.5 H20"/>
-                                <TextBlock Grid.Column="1" Text="CPU" Style="{StaticResource RowLabel}"/>
-                                <ProgressBar x:Name="CpuBar" Grid.Column="2" Style="{StaticResource Bar}" Foreground="{StaticResource CpuGrad}"/>
-                                <TextBlock x:Name="CpuText" Grid.Column="3" Style="{StaticResource RowValue}"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="8"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="8"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                                <Path Grid.Row="1" Style="{StaticResource LineIcon}"
-                                      Data="M3,7 H21 V15 H3 Z M6.5,10 V12 M10,10 V12 M14,10 V12 M17.5,10 V12 M6,15 V18 M10,15 V18 M14,15 V18 M18,15 V18"/>
-                                <TextBlock Grid.Row="1" Grid.Column="1" Text="Memory" Style="{StaticResource RowLabel}"/>
-                                <ProgressBar x:Name="RamBar" Grid.Row="1" Grid.Column="2" Style="{StaticResource Bar}" Foreground="{StaticResource RamGrad}"/>
-                                <TextBlock x:Name="RamText" Grid.Row="1" Grid.Column="3" Style="{StaticResource RowValue}"/>
+                                    <Border Style="{StaticResource GlassCard}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <Border Style="{StaticResource CardIconBox}" Background="#330A84FF" BorderBrush="#590A84FF">
+                                                    <Path Style="{StaticResource CardIcon}" Stroke="#389BFF"
+                                                          Data="M5,8 A3,3 0 0 1 8,5 H16 A3,3 0 0 1 19,8 V16 A3,3 0 0 1 16,19 H8 A3,3 0 0 1 5,16 Z M9,9 H15 V15 H9 Z M9,2 V5 M15,2 V5 M9,19 V22 M15,19 V22 M2,9 H5 M2,15 H5 M19,9 H22 M19,15 H22"/>
+                                                </Border>
+                                                <TextBlock Text="CPU" Style="{StaticResource CardLabel}"/>
+                                                <TextBlock x:Name="CpuSub" Text="Idle" Foreground="#389BFF" Style="{StaticResource CardSub}"/>
+                                            </StackPanel>
+                                            <Grid Grid.Column="1" Width="52" Height="52" VerticalAlignment="Center">
+                                                <Ellipse Stroke="#1FFFFFFF" StrokeThickness="4.5"/>
+                                                <Path x:Name="CpuRing" Stroke="#0A84FF" Style="{StaticResource Ring}"/>
+                                                <TextBlock x:Name="CpuText" Style="{StaticResource RingValue}"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
 
-                                <Path Grid.Row="2" Style="{StaticResource LineIcon}"
-                                      Data="M3,8 H18 A1,1 0 0 1 19,9 V15 A1,1 0 0 1 18,16 H3 A1,1 0 0 1 2,15 V9 A1,1 0 0 1 3,8 Z M21,10.5 V13.5 M8.5,10 L6.5,12.5 H9.5 L7.5,15"/>
-                                <TextBlock x:Name="BatLabel" Grid.Row="2" Grid.Column="1" Text="Battery" Style="{StaticResource RowLabel}"/>
-                                <ProgressBar x:Name="BatBar" Grid.Row="2" Grid.Column="2" Style="{StaticResource Bar}" Foreground="{StaticResource BatGrad}"/>
-                                <TextBlock x:Name="BatText" Grid.Row="2" Grid.Column="3" Style="{StaticResource RowValue}"/>
+                                    <Border Grid.Column="2" Style="{StaticResource GlassCard}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <Border Style="{StaticResource CardIconBox}" Background="#405E5CE6" BorderBrush="#597D7AFF">
+                                                    <Path Style="{StaticResource CardIcon}" Stroke="#8E8CFF"
+                                                          Data="M5.5,7 H18.5 A2.5,2.5 0 0 1 21,9.5 V14.5 A2.5,2.5 0 0 1 18.5,17 H5.5 A2.5,2.5 0 0 1 3,14.5 V9.5 A2.5,2.5 0 0 1 5.5,7 Z M7,7 V4 M12,7 V4 M17,7 V4 M7,20 V17 M12,20 V17 M17,20 V17"/>
+                                                </Border>
+                                                <TextBlock Text="Memory" Style="{StaticResource CardLabel}"/>
+                                                <TextBlock x:Name="RamSub" Foreground="#9E9CFF" Style="{StaticResource CardSub}"/>
+                                            </StackPanel>
+                                            <Grid Grid.Column="1" Width="52" Height="52" VerticalAlignment="Center">
+                                                <Ellipse Stroke="#1FFFFFFF" StrokeThickness="4.5"/>
+                                                <Path x:Name="RamRing" Stroke="#7D7AFF" Style="{StaticResource Ring}"/>
+                                                <TextBlock x:Name="RamText" Style="{StaticResource RingValue}"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
 
-                                <Path Grid.Row="3" Style="{StaticResource LineIcon}"
-                                      Data="M4,9.5 H7.5 L12,6 V18 L7.5,14.5 H4 Z M15.5,9.5 A3.5,3.5 0 0 1 15.5,14.5 M18,7 A7,7 0 0 1 18,17"/>
-                                <TextBlock Grid.Row="3" Grid.Column="1" Text="Volume" Style="{StaticResource RowLabel}"/>
-                                <Slider x:Name="VolSlider" Grid.Row="3" Grid.Column="2" Style="{StaticResource VolSlider}"
-                                        Minimum="0" Maximum="100" VerticalAlignment="Center" ValueChanged="Vol_Changed"/>
-                                <TextBlock x:Name="VolText" Grid.Row="3" Grid.Column="3" Style="{StaticResource RowValue}"/>
+                                    <Border Grid.Column="4" Style="{StaticResource GlassCard}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <Border Style="{StaticResource CardIconBox}" Background="#3330D158" BorderBrush="#5930D158">
+                                                    <Path Fill="#30D158" Width="13" Height="13" Stretch="Uniform"
+                                                          Data="M13,2 L4,14 H11 L10,22 L19,10 H12 L13,2 Z"/>
+                                                </Border>
+                                                <TextBlock x:Name="BatLabel" Text="Battery" Style="{StaticResource CardLabel}"/>
+                                                <TextBlock x:Name="BatSub" Foreground="#4ADE80" Style="{StaticResource CardSub}"/>
+                                            </StackPanel>
+                                            <Grid Grid.Column="1" Width="52" Height="52" VerticalAlignment="Center">
+                                                <Ellipse Stroke="#1FFFFFFF" StrokeThickness="4.5"/>
+                                                <Path x:Name="BatRing" Stroke="#30D158" Style="{StaticResource Ring}"/>
+                                                <TextBlock x:Name="BatText" Style="{StaticResource RingValue}"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+
+                                <Border x:Name="VolPill" Grid.Row="2" CornerRadius="16" Background="#730C0D12"
+                                        BorderBrush="#24FFFFFF" BorderThickness="1" Cursor="SizeWE"
+                                        MouseLeftButtonDown="VolPill_Down" MouseMove="VolPill_Move"
+                                        MouseLeftButtonUp="VolPill_Up" MouseWheel="VolPill_Wheel">
+                                    <Grid>
+                                        <Border x:Name="VolFill" HorizontalAlignment="Left" Width="0" CornerRadius="15,4,4,15">
+                                            <Border.Background>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                    <GradientStop Color="#FFFFFFFF" Offset="0"/>
+                                                    <GradientStop Color="#EEF0F0F5" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Border.Background>
+                                        </Border>
+                                        <StackPanel Orientation="Horizontal" Margin="16,0" VerticalAlignment="Center" IsHitTestVisible="False">
+                                            <Path x:Name="VolIcon" Stroke="#111827" StrokeThickness="2" StrokeLineJoin="Round"
+                                                  StrokeStartLineCap="Round" StrokeEndLineCap="Round" Width="18" Height="18" Stretch="Uniform"
+                                                  Data="M11,5 L6,9 H2 V15 H6 L11,19 Z M15.54,8.46 A5,5 0 0 1 15.54,15.54 M19.07,4.93 A10,10 0 0 1 19.07,19.07"/>
+                                            <TextBlock x:Name="VolLabel" Text="Volume" Foreground="#111827" FontSize="13.5" FontWeight="SemiBold"
+                                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        <TextBlock x:Name="VolText" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,16,0"
+                                                   Foreground="White" FontSize="14" FontWeight="Bold" IsHitTestVisible="False"/>
+                                    </Grid>
+                                </Border>
                             </Grid>
 
                             <Grid x:Name="Panel3" Visibility="Collapsed">
@@ -624,6 +896,75 @@
                             </Grid>
 
                             <Grid x:Name="Panel4" Visibility="Collapsed">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="170"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel VerticalAlignment="Center" Margin="4,0,0,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock x:Name="WxCity" Text="Locating…" Foreground="White" FontSize="14.5" FontWeight="SemiBold"
+                                                   TextTrimming="CharacterEllipsis" MaxWidth="145"/>
+                                        <Path Fill="#389BFF" Width="10" Height="10" Stretch="Uniform" Margin="6,2,0,0" VerticalAlignment="Center"
+                                              Data="M3,11 L22,2 L13,21 L11,13 Z"/>
+                                    </StackPanel>
+                                    <TextBlock x:Name="WxTemp" Text="--°" Foreground="White" FontSize="46" FontWeight="Light"
+                                               FontFamily="Segoe UI Variable Display, Segoe UI" Margin="-2,-6,0,-6"/>
+                                    <TextBlock x:Name="WxCond" Foreground="#EBFFFFFF" FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock x:Name="WxHiLo" Foreground="#8E8E93" FontSize="12" FontWeight="SemiBold" Margin="0,1,0,0"/>
+                                </StackPanel>
+
+                                <Grid Grid.Column="2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="8"/>
+                                        <RowDefinition Height="26"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Border Style="{StaticResource GlassCard}" Padding="10,6,10,6">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <StackPanel Orientation="Horizontal" Margin="2,0,0,0">
+                                                <Path Stroke="#8E8E93" StrokeThickness="2" Width="10" Height="10" Stretch="Uniform" VerticalAlignment="Center"
+                                                      Data="M21,12 A9,9 0 1 1 3,12 A9,9 0 1 1 21,12 Z M12,7 V12 L15,14"/>
+                                                <TextBlock Text="HOURLY FORECAST" Foreground="#8E8E93" FontSize="10" FontWeight="Bold"
+                                                           Margin="6,0,0,0" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                            <UniformGrid x:Name="WxHourly" Grid.Row="1" Rows="1" Columns="6" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+
+                                    <StackPanel Grid.Row="2" Orientation="Horizontal">
+                                        <Border Style="{StaticResource WxChip}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Path Stroke="#FFD60A" StrokeThickness="2" Width="12" Height="12" Stretch="Uniform" StrokeStartLineCap="Round" StrokeEndLineCap="Round" VerticalAlignment="Center"
+                                                      Data="M16,12 A4,4 0 1 1 8,12 A4,4 0 1 1 16,12 Z M12,2 V4 M12,20 V22 M2,12 H4 M20,12 H22 M4.9,4.9 L6.3,6.3 M17.7,17.7 L19.1,19.1 M4.9,19.1 L6.3,17.7 M17.7,6.3 L19.1,4.9"/>
+                                                <TextBlock x:Name="WxUv" Style="{StaticResource WxChipText}"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Style="{StaticResource WxChip}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Path Stroke="#64D2FF" StrokeThickness="2" Width="12" Height="12" Stretch="Uniform" StrokeStartLineCap="Round" StrokeEndLineCap="Round" VerticalAlignment="Center"
+                                                      Data="M3,8 H13 A3,3 0 1 0 10,5 M3,12 H18 A3,3 0 1 1 15,15 M3,16 H9"/>
+                                                <TextBlock x:Name="WxWind" Style="{StaticResource WxChipText}"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Style="{StaticResource WxChip}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Path Stroke="#5AC8FA" StrokeThickness="2" Width="10" Height="12" Stretch="Uniform" StrokeLineJoin="Round" VerticalAlignment="Center"
+                                                      Data="M12,3 C12,3 6,10 6,14 A6,6 0 0 0 18,14 C18,10 12,3 12,3 Z"/>
+                                                <TextBlock x:Name="WxHum" Style="{StaticResource WxChipText}"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+
+                            <Grid x:Name="Panel5" Visibility="Collapsed">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
@@ -634,7 +975,8 @@
                                 </Grid>
                                 <TextBlock x:Name="NotifEmpty" Grid.RowSpan="2" Text="No notifications" Foreground="{StaticResource Dim}" FontSize="13"
                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <ListBox x:Name="NotifList" Grid.Row="1" Style="{StaticResource CleanList}">
+                                <ListBox x:Name="NotifList" Grid.Row="1" Style="{StaticResource CleanList}" Cursor="Hand"
+                                         PreviewMouseLeftButtonUp="NotifList_Click">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>

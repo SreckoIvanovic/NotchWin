@@ -849,7 +849,13 @@
                                     </Border>
                                 </Grid>
 
-                                <Border x:Name="VolPill" Grid.Row="2" CornerRadius="16" Background="#730C0D12"
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition x:Name="BrightGap" Width="8"/>
+                                        <ColumnDefinition x:Name="BrightCol" Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                <Border x:Name="VolPill" CornerRadius="16" Background="#730C0D12"
                                         BorderBrush="#24FFFFFF" BorderThickness="1" Cursor="SizeWE"
                                         MouseLeftButtonDown="VolPill_Down" MouseMove="VolPill_Move"
                                         MouseLeftButtonUp="VolPill_Up" MouseWheel="VolPill_Wheel">
@@ -873,6 +879,32 @@
                                                    Foreground="White" FontSize="14" FontWeight="Bold" IsHitTestVisible="False"/>
                                     </Grid>
                                 </Border>
+
+                                <Border x:Name="BrightPill" Grid.Column="2" CornerRadius="16" Background="#730C0D12"
+                                        BorderBrush="#24FFFFFF" BorderThickness="1" Cursor="SizeWE"
+                                        MouseLeftButtonDown="BrightPill_Down" MouseMove="BrightPill_Move"
+                                        MouseLeftButtonUp="BrightPill_Up" MouseWheel="BrightPill_Wheel">
+                                    <Grid>
+                                        <Border x:Name="BrightFill" HorizontalAlignment="Left" Width="0" CornerRadius="15,4,4,15">
+                                            <Border.Background>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                    <GradientStop Color="#FFFFFFFF" Offset="0"/>
+                                                    <GradientStop Color="#EEF0F0F5" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Border.Background>
+                                        </Border>
+                                        <StackPanel Orientation="Horizontal" Margin="16,0" VerticalAlignment="Center" IsHitTestVisible="False">
+                                            <Path x:Name="BrightIcon" Stroke="#111827" StrokeThickness="2" StrokeLineJoin="Round"
+                                                  StrokeStartLineCap="Round" StrokeEndLineCap="Round" Width="18" Height="18" Stretch="Uniform"
+                                                  Data="M16,12 A4,4 0 1 1 8,12 A4,4 0 1 1 16,12 Z M12,2 V4 M12,20 V22 M2,12 H4 M20,12 H22 M4.9,4.9 L6.3,6.3 M17.7,17.7 L19.1,19.1 M4.9,19.1 L6.3,17.7 M17.7,6.3 L19.1,4.9"/>
+                                            <TextBlock x:Name="BrightLabel" Text="Brightness" Foreground="#111827" FontSize="13.5" FontWeight="SemiBold"
+                                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        <TextBlock x:Name="BrightText" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,16,0"
+                                                   Foreground="White" FontSize="14" FontWeight="Bold" IsHitTestVisible="False"/>
+                                    </Grid>
+                                </Border>
+                                </Grid>
                             </Grid>
 
                             <Grid x:Name="Panel3" Visibility="Collapsed">

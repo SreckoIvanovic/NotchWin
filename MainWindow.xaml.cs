@@ -118,6 +118,7 @@ public partial class MainWindow : Window
 
         _media.Changed += () => Dispatcher.BeginInvoke(UpdateMedia);
         VolPill.SizeChanged += (_, _) => SetVolumeUi(_audio.GetVolume() * 100);
+        BrightPill.SizeChanged += (_, _) => { if (_brightLevel >= 0) SetPillUi(BrightPill, BrightFill, BrightIcon, BrightLabel, BrightText, _brightLevel); };
 
         Loaded += async (_, _) =>
         {
@@ -679,6 +680,7 @@ private void UpdateSystemPanel()
         }
 
         if (!VolPill.IsMouseCaptured) SetVolumeUi(_audio.GetVolume() * 100);
+        UpdateBrightnessPill();
     }
 
     private static void SetRing(System.Windows.Shapes.Path ring, double percent)
@@ -701,19 +703,57 @@ private void UpdateSystemPanel()
 
     private static readonly SolidColorBrush DarkInk = new(Color.FromRgb(0x11, 0x18, 0x27));
 
-    private void SetVolumeUi(double pct)
+    private void SetVolumeUi(double pct) => SetPillUi(VolPill, VolFill, VolIcon, VolLabel, VolText, pct);
+
+    private static void SetPillUi(Border pill, Border fill, System.Windows.Shapes.Path icon, TextBlock label, TextBlock value, double pct)
     {
         pct = Math.Clamp(Math.Round(pct), 0, 100);
-        double w = Math.Max(0, VolPill.ActualWidth - 2) * pct / 100.0;
-        VolFill.Width = w;
+        double width = Math.Max(0, pill.ActualWidth - 2);
+        double w = width * pct / 100.0;
+        fill.Width = w;
         double rl = Math.Min(15, w / 2);
-        VolFill.CornerRadius = new CornerRadius(rl, Math.Min(4, w / 2), Math.Min(4, w / 2), rl);
-        VolText.Text = (int)pct + "%";
+        double rr = Math.Min(Math.Max(4, 15 - (width - w)), w / 2);
+        fill.CornerRadius = new CornerRadius(rl, rr, rr, rl);
+        value.Text = (int)pct + "%";
 
-        bool leftDark = pct > 22;
-        VolIcon.Stroke = leftDark ? DarkInk : Brushes.White;
-        VolLabel.Foreground = leftDark ? DarkInk : Brushes.White;
-        VolText.Foreground = pct > 88 ? DarkInk : Brushes.White;
+        icon.Stroke = w > 25 ? DarkInk : Brushes.White;
+        label.Foreground = w > 44 + label.ActualWidth / 2 ? DarkInk : Brushes.White;
+        value.Foreground = w > width - 16 - value.ActualWidth / 2 ? DarkInk : Brushes.White;
+    }
+
+    private readonly BrightnessService _brightness = new();
+    private int _brightLevel = -1;
+
+    private void UpdateBrightnessPill()
+    {
+        bool on = _brightness.Supported;
+        BrightPill.Visibility = on ? Visibility.Visible : Visibility.Collapsed;
+        BrightGap.Width = new GridLength(on ? 8 : 0);
+        BrightCol.Width = on ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
+        if (!on || BrightPill.IsMouseCaptured) return;
+        _brightLevel = _brightness.Get();
+        SetPillUi(BrightPill, BrightFill, BrightIcon, BrightLabel, BrightText, _brightLevel);
+    }
+
+    private void SetBrightnessFromMouse(MouseEventArgs e)
+    {
+        double pct = Math.Clamp(100 * e.GetPosition(BrightPill).X / Math.Max(1, BrightPill.ActualWidth), 0, 100);
+        _brightLevel = (int)Math.Round(pct);
+        _brightness.Set(_brightLevel);
+        SetPillUi(BrightPill, BrightFill, BrightIcon, BrightLabel, BrightText, pct);
+    }
+
+    private void BrightPill_Down(object sender, MouseButtonEventArgs e) { BrightPill.CaptureMouse(); SetBrightnessFromMouse(e); e.Handled = true; }
+    private void BrightPill_Move(object sender, MouseEventArgs e) { if (BrightPill.IsMouseCaptured) SetBrightnessFromMouse(e); }
+    private void BrightPill_Up(object sender, MouseButtonEventArgs e) { BrightPill.ReleaseMouseCapture(); }
+
+    private void BrightPill_Wheel(object sender, MouseWheelEventArgs e)
+    {
+        if (_brightLevel < 0) _brightLevel = _brightness.Get();
+        _brightLevel = Math.Clamp(_brightLevel + (e.Delta > 0 ? 5 : -5), 0, 100);
+        _brightness.Set(_brightLevel);
+        SetPillUi(BrightPill, BrightFill, BrightIcon, BrightLabel, BrightText, _brightLevel);
+        e.Handled = true;
     }
 
     private void SetVolumeFromMouse(MouseEventArgs e)

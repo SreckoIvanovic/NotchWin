@@ -513,7 +513,8 @@ private void UpdateWeatherPanel()
         }
     }
 
-    private static string Deg(double t) => Math.Round(t).ToString("0", CultureInfo.InvariantCulture) + "°";
+    private static string Deg(double t) =>
+        ((int)Math.Round(t, MidpointRounding.AwayFromZero)).ToString(CultureInfo.InvariantCulture) + "°";
 
 private void OnTick()
     {
@@ -568,7 +569,7 @@ private void UpdatePillBattery()
     {
         if (!await _weather.RefreshAsync(_settings.City) || !_weather.HasData) return;
         WeatherIcons.Draw(WeatherCanvas, _weather.Kind, _weather.IsDay);
-        PillTemp.Text = Math.Round(_weather.Temperature).ToString("0", CultureInfo.InvariantCulture) + "°";
+        PillTemp.Text = Deg(_weather.Temperature);
         PillWeather.Visibility = Visibility.Visible;
         UpdateWeatherPanel();
     }

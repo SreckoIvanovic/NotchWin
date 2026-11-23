@@ -21,7 +21,7 @@
 - **Smooth, spring-based animations** – the notch grows and shrinks like a real island; interrupting it mid-way stays fluid.
 - **Music** – title, artist, album art, seek bar, shuffle/repeat and playback controls for Spotify, browsers and any app that reports media to Windows.
 - **File shelf** – drop files on the notch, then drag them out anywhere later.
-- **System** – CPU, memory (GB used), battery (time left) and an iOS-style volume slider.
+- **System** – CPU, memory (GB used), battery (time left) and iOS-style volume and brightness sliders (drag, click or scroll; brightness works on laptop displays).
 - **Calendar** – big clock, today's date and the current month.
 - **Weather** – your city, hourly forecast, UV index, wind and humidity.
 - **Notifications** – banners drop out of the notch; click one to open what it points to (e.g. the screenshot you just took). Clear one or all.
@@ -86,7 +86,7 @@ Right-click the open notch for:
 
 - **WPF on .NET 10** with WinRT APIs: `GlobalSystemMediaTransportControlsSessionManager` (media),
   `UserNotificationListener` (notifications), `Geolocator` (location).
-- **NAudio** for the system volume.
+- **NAudio** for the system volume, **WMI** (`WmiMonitorBrightness`) for display brightness.
 - Weather from **[Open-Meteo](https://open-meteo.com)**, city name from **OpenStreetMap Nominatim**; coordinates are rounded
   to about 1 km before they are sent.
 - Opening a clicked notification reads the toast's launch action from a copy of the Windows notification database
@@ -103,6 +103,7 @@ NotchWin/
 ├── Services/
 │   ├── MediaService.cs         now playing + controls
 │   ├── AudioService.cs         system volume
+│   ├── BrightnessService.cs    display brightness
 │   ├── SystemStats.cs          CPU, memory, battery
 │   ├── NotificationService.cs  reads Windows notifications
 │   ├── NotificationActivator.cs opens a clicked notification

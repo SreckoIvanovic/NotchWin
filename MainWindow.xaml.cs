@@ -567,7 +567,9 @@ private void UpdatePillBattery()
 
     private async Task RefreshWeatherAsync()
     {
-        if (!await _weather.RefreshAsync(_settings.City) || !_weather.HasData) return;
+        bool ok = await _weather.RefreshAsync(_settings.City) && _weather.HasData;
+        _weatherTimer.Interval = ok ? TimeSpan.FromMinutes(15) : TimeSpan.FromSeconds(30);
+        if (!ok) return;
         WeatherIcons.Draw(WeatherCanvas, _weather.Kind, _weather.IsDay);
         PillTemp.Text = Deg(_weather.Temperature);
         PillWeather.Visibility = Visibility.Visible;
@@ -603,6 +605,7 @@ private void UpdateMedia()
 
     private void UpdateEqualizer()
     {
+        Equalizer.Visibility = _media.Playing ? Visibility.Visible : Visibility.Hidden;
         bool run = _media.Playing && _mode == Mode.Expanded && _tab == 0;
         if (run == _eqRunning) return;
         _eqRunning = run;

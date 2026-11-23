@@ -149,8 +149,9 @@ protected override void OnSourceInitialized(EventArgs e)
         _fgPoll.Start();
 
         HwndSource.FromHwnd(_hwnd)?.AddHook(WndProc);
-        NativeMethods.RegisterHotKey(_hwnd, HideHotkeyId,
-            NativeMethods.MOD_CONTROL | NativeMethods.MOD_ALT | NativeMethods.MOD_NOREPEAT, 0x4E );
+        bool ok = NativeMethods.RegisterHotKey(_hwnd, HideHotkeyId,
+            NativeMethods.MOD_WIN | NativeMethods.MOD_ALT | NativeMethods.MOD_NOREPEAT, 0x4E );
+        Log.Write(ok ? "Hotkey Win+Alt+N registered" : "Hotkey Win+Alt+N is taken by another app");
     }
 
     private const int HideHotkeyId = 1;

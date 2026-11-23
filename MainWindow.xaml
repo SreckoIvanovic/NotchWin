@@ -515,7 +515,7 @@
                 <ContextMenu>
                     <MenuItem x:Name="AutoStartItem" Header="Start with Windows" IsCheckable="True" Click="AutoStart_Click"/>
                     <MenuItem x:Name="AutoHideItem" Header="Auto-hide over maximized / fullscreen windows" IsCheckable="True" Click="AutoHide_Click"/>
-                    <MenuItem Header="Hide notch" InputGestureText="Ctrl+Alt+N" Click="Hide_Click"/>
+                    <MenuItem Header="Hide notch" InputGestureText="Win+Alt+N" Click="Hide_Click"/>
                     <MenuItem Header="Settings (weather city)…" Click="OpenSettings_Click"/>
                     <Separator/>
                     <MenuItem Header="Exit" Click="Exit_Click"/>
